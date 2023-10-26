@@ -64,7 +64,7 @@
             <th>อายุ</th>
             <th>ประเภทรายรับ/รายจ่าย</th>
             <th>จำนวนเงิน</th>
-            <th>วันที่รายการเกิด</th>
+            <th>วันที่เกิดรายการ</th>
             <th>อัพเดท</th>
             <th>การจัดการ</th> <!-- เพิ่มคอลัมน์นี้สำหรับปุ่มแก้ไขและลบ -->
         </tr>
@@ -80,9 +80,9 @@
                 @endif
             </td>
             <td>{{ $transaction->prefix }}</td>
-            <td>{{ $transaction->first_name }}</td>
-            <td>{{ $transaction->last_name }}</td>
-            <td>{{ $transaction->birthdate }}</td>
+            <td class="first_name">{{ $transaction->first_name }}</td>
+            <td class="last_name">{{ $transaction->last_name }}</td>
+            <td class="birthdate">{{ $transaction->birthdate }}</td>
             <td class="age">{{ $transaction->age }}</td>
             <td>{{ $transaction->transaction_type }}</td>
             <td>{{ $transaction->amount }} บาท</td>
@@ -96,45 +96,15 @@
     @endforeach
     </tbody>
 </table>
+<div id="ageChartContainer">
+    <canvas id="ageChart"></canvas>
+    <div id="ageCounts"></div>
+</div>
 </body>
-<script>
-    var sortAscending = true; // ตัวแปรเพื่อตรวจสอบสถานะการเรียงลำดับ
 
-    document.getElementById('sort-by-age').addEventListener('click', function() {
-        // ดึงรายการทั้งหมดออกมา
-        var rows = document.querySelectorAll('table tbody tr');
-
-        // แปลงข้อมูลเป็นอายุและจัดเก็บในอาร์เรย์
-        var data = [];
-        rows.forEach(function(row) {
-            var age = parseInt(row.querySelector('.age').textContent);
-            data.push({ row: row, age: age });
-        });
-
-        // สลับการเรียงลำดับ
-        if (sortAscending) {
-            data.sort(function(a, b) {
-                return a.age - b.age;
-            });
-        } else {
-            data.sort(function(a, b) {
-                return b.age - a.age;
-            });
-        }
-
-        // ลบรายการทั้งหมดจากตาราง
-        var tbody = document.querySelector('table tbody');
-        tbody.innerHTML = '';
-
-        // แทรกรายการที่เรียงลำดับใหม่
-        data.forEach(function(item) {
-            tbody.appendChild(item.row);
-        });
-
-        // สลับสถานะการเรียงลำดับ
-        sortAscending = !sortAscending;
-    });
-</script>
+<script src="js/sort.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/chart.js"></script>
 
 </html>
 
